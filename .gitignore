@@ -150,7 +150,6 @@ dist/
 downloads/
 eggs/
 .eggs/
-lib/
 lib64/
 parts/
 sdist/
@@ -313,4 +312,8 @@ secrets.json
 *.tfstate
 *.tfstate.backup
 .env.vault
+
+# Override global gitignore to track backend/lib
+!backend/lib/
+!backend/lib/**
 
