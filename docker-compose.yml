@@ -1,0 +1,45 @@
+services:
+
+  pdf_renderer:
+    build: ./pdf_renderer
+    container_name: brightwave-pdf
+    restart: unless-stopped
+    environment:
+      STATEMENTS_DIR: /app/statements
+    volumes:
+      - ./statements:/app/statements:ro
+    networks: [brightwave]
+    expose:
+      - "8001"
+
+  backend:
+    build: ./backend
+    container_name: brightwave-backend
+    restart: unless-stopped
+    environment:
+      ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY:?ANTHROPIC_API_KEY is required}
+      ANTHROPIC_MODEL: ${ANTHROPIC_MODEL:-claude-haiku-4-5}
+      RENDERER_URL: http://pdf_renderer:8001
+      PORT: 8000
+      MAX_TOKENS: ${MAX_TOKENS:-2048}
+    depends_on:
+      pdf_renderer:
+        condition: service_healthy
+    networks: [brightwave]
+    expose:
+      - "8000"
+
+  web:
+    build: ./frontend
+    container_name: brightwave-web
+    restart: unless-stopped
+    ports:
+      - "${WEB_PORT:-8080}:80"
+    depends_on:
+      backend:
+        condition: service_healthy
+    networks: [brightwave]
+
+networks:
+  brightwave:
+    driver: bridge

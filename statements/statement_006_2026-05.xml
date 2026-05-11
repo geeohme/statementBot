@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<statement>
+  <meta>
+    <accountNumber>458529</accountNumber>
+    <billDate>2026-05-03</billDate>
+    <servicePeriod start="2026-05-16" end="2026-06-15" days="31"/>
+    <dueDate>2026-05-24</dueDate>
+    <statementSeq>6</statementSeq>
+    <promoExpirations>
+      <expiration>3 Product Discount expired</expiration>
+      <expiration>Internet 12-month Introductory Rate expired (Internet $95 → $120)</expiration>
+    </promoExpirations>
+  </meta>
+  <customer>
+    <name>Lawrence O'Donnell</name>
+    <memberSince>2013-05-16</memberSince>
+    <voiceNumber>(212) 555-0142</voiceNumber>
+    <serviceAddress>
+      <line1>425 W 53rd St</line1>
+      <line2>Apt 7B</line2>
+      <city>New York</city>
+      <state>NY</state>
+      <zip>10019</zip>
+    </serviceAddress>
+    <mailingAddress>
+      <line1>425 W 53rd St</line1>
+      <line2>Apt 7B</line2>
+      <city>New York</city>
+      <state>NY</state>
+      <zip>10019</zip>
+    </mailingAddress>
+  </customer>
+  <billAtAGlance>
+    <previousBalance>323.21</previousBalance>
+    <payments>
+      <payment date="2026-04-25" method="EFT" label="EFT Payment - thank you">-323.21</payment>
+    </payments>
+    <balanceForward>0.00</balanceForward>
+    <regularMonthlyCharges>374.42</regularMonthlyCharges>
+    <taxesFeesOther>15.98</taxesFeesOther>
+    <newCharges>390.40</newCharges>
+    <amountDue>390.40</amountDue>
+    <savingsThisMonth>15.00</savingsThisMonth>
+  </billAtAGlance>
+  <remitTo>
+    <name>BrightWave Cable</name>
+    <po_box>PO Box 6480</po_box>
+    <city>New York</city>
+    <state>NY</state>
+    <zip>10101-6480</zip>
+  </remitTo>
+  <charges total="374.42">
+    <section name="My BrightWave plan" total="281.95">
+      <service name="Internet" tier="1 Gig" price="120.00">
+        <discount label="60-month $15.00 Guarantee Discount" amount="-15.00" endDate="2030-10-15" appliedToBase="true"/>
+        <included>Unlimited Data Option</included>
+        <included>BrightWave WiFi Gateway</included>
+      </service>
+      <service name="TV" tier="Ultimate TV" price="131.95">
+        <description>Includes Limited Basic, Sports &amp; News, Kids &amp; Family, Entertainment, 50+ Additional Channels, Streampix, HD Programming, and 20 Hours of DVR Service.</description>
+        <lineItem name="Ultimate TV" amount="90.50"/>
+        <lineItem name="Broadcast TV Fee" amount="34.85"/>
+        <lineItem name="Regional Sports Fee" amount="6.60"/>
+      </service>
+      <service name="Voice" tier="BrightWave Voice" price="30.00">
+        <description>Unlimited Local and Long Distance Calls. International Calling Included To Several Countries With Others Available At An Additional Charge.</description>
+      </service>
+      <discount label="3 Product Discount (EXPIRED)" amount="0.00"/>
+    </section>
+    <section name="Streamstore" total="35.98">
+      <lineItem name="HBO Max" amount="18.49"/>
+      <lineItem name="Peacock Premium" amount="10.99"/>
+      <lineItem name="Apple TV+" amount="6.50"/>
+    </section>
+    <section name="Add ons" total="28.49">
+      <lineItem name="DVR Service" amount="10.00"/>
+      <lineItem name="Premium Channel Pack" amount="13.49"/>
+      <lineItem name="HD Technology Fee" amount="5.00"/>
+    </section>
+    <section name="Equipment &amp; services" total="28.00">
+      <lineItem name="TV Box + Remote" amount="28.00" note="Qty 2 @ $14.00 each"/>
+    </section>
+  </charges>
+  <taxesFees total="15.98">
+    <category name="Other charges" total="1.88">
+      <taxLine name="Federal Universal Service Fund" amount="0.74"/>
+      <taxLine name="Regulatory Cost Recovery" amount="1.14"/>
+    </category>
+    <category name="Taxes &amp; government fees" total="14.10">
+      <taxLine name="Sales Tax" amount="1.94"/>
+      <taxLine name="State Excise Tax" amount="6.40"/>
+      <taxLine name="Franchise Fee" amount="4.24"/>
+      <taxLine name="911 Fee" amount="1.52"/>
+    </category>
+  </taxesFees>
+</statement>

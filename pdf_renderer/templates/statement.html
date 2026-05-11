@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>BrightWave Cable — Statement {{ stmt.meta.billDate }}</title>
+  <link rel="stylesheet" href="{{ css_url }}">
+</head>
+<body>
+
+{# ============================================================
+   PAGE 1 — Summary & remit stub
+   ============================================================ #}
+<section class="page page-summary">
+
+  {# --- Page header --- #}
+  <header class="page-header">
+    <div class="brand"><img src="{{ logo_url }}" alt="BrightWave Cable"></div>
+    <div class="meta">
+      <div class="meta-cell">
+        <div class="meta-label">Account Number</div>
+        <div class="meta-value">{{ stmt.meta.accountNumber }}</div>
+      </div>
+      <div class="meta-cell">
+        <div class="meta-label">Billing Date</div>
+        <div class="meta-value">{{ stmt.meta.billDate | longdate }}</div>
+      </div>
+      <div class="meta-cell">
+        <div class="meta-label">Services From</div>
+        <div class="meta-value">
+          {{ stmt.meta.servicePeriodStart | shortdate }}
+          to {{ stmt.meta.servicePeriodEnd | shortdate }}
+        </div>
+      </div>
+      <div class="meta-cell">
+        <div class="meta-label">Page</div>
+        <div class="meta-value">1 of 2</div>
+      </div>
+    </div>
+  </header>
+
+  {# --- Greeting --- #}
+  <h1 class="greeting">Hello {{ stmt.customer.firstName }}</h1>
+  <p class="member-line">
+    Thanks for being a member since {{ stmt.customer.memberSince | longdate }}.
+    Learn more about your Platinum benefits at
+    <span class="link">brightwave.com/membership</span>.
+  </p>
+
+  {# --- Top: two-column glance + explanation --- #}
+  <div class="two-col">
+
+    {# Bill at a glance #}
+    <div class="glance">
+      <h2>Your bill at a glance</h2>
+      <div class="glance-period">
+        For {{ stmt.meta.servicePeriodStart | shortdate }}
+        – {{ stmt.meta.servicePeriodEnd | shortdate }}
+      </div>
+
+      <table class="glance-table">
+        <tr>
+          <td class="row-label">Previous balance</td>
+          <td class="row-amount">${{ stmt.glance.previousBalance | money }}</td>
+        </tr>
+        {% for p in stmt.glance.payments %}
+        <tr>
+          <td class="row-label">{{ p.label }}</td>
+          <td class="row-detail">{{ p.date | shortdate }}</td>
+          <td class="row-amount neg">-${{ (-p.amount) | money }}</td>
+        </tr>
+        {% endfor %}
+        <tr class="row-strong">
+          <td class="row-label">Balance forward</td>
+          <td class="row-amount">${{ stmt.glance.balanceForward | money }}</td>
+        </tr>
+        <tr>
+          <td class="row-label">Regular monthly charges</td>
+          <td class="row-detail">Page 2</td>
+          <td class="row-amount">${{ stmt.glance.regularMonthlyCharges | money }}</td>
+        </tr>
+        <tr>
+          <td class="row-label">Taxes, fees and other charges</td>
+          <td class="row-detail">Page 2</td>
+          <td class="row-amount">${{ stmt.glance.taxesFeesOther | money }}</td>
+        </tr>
+        <tr class="row-strong">
+          <td class="row-label">New charges</td>
+          <td class="row-amount">${{ stmt.glance.newCharges | money }}</td>
+        </tr>
+      </table>
+
+      <div class="amount-due">
+        <div class="amount-due-label">Amount due</div>
+        <div class="amount-due-value">${{ stmt.glance.amountDue | money }}</div>
+      </div>
+    </div>
+
+    {# Your bill explained #}
+    <div class="explain">
+      <h2>Your bill explained</h2>
+
+      {% if stmt.meta.promoExpirations %}
+      <p class="callout red">
+        <strong>Heads up:</strong> the following promotions ended this period
+        and your bill went up by ${{ (stmt.glance.amountDue - stmt.previousAmount) | money }}:
+      </p>
+      <ul class="callout-list">
+        {% for exp in stmt.meta.promoExpirations %}
+        <li>{{ exp }}</li>
+        {% endfor %}
+      </ul>
+      <ul class="bill-tips">
+        <li>This page gives you a quick summary of your monthly bill. A detailed breakdown of your charges begins on page 2.</li>
+        <li>Go to <span class="link">brightwave.com/myaccount</span> to enroll in automatic payments and paperless billing to receive a monthly discount on your bill.</li>
+      </ul>
+      {% else %}
+      <p class="callout green">
+        You saved ${{ stmt.glance.savingsThisMonth | money }} this month
+        with your guarantee and product discounts. Please see page 2 of this bill for more details.
+      </p>
+      <ul class="bill-tips">
+        <li>This page gives you a quick summary of your monthly bill. A detailed breakdown of your charges begins on page 2.</li>
+        <li>Go to <span class="link">brightwave.com/myaccount</span> to enroll in automatic payments and paperless billing to receive a monthly discount on your bill.</li>
+      </ul>
+      {% endif %}
+    </div>
+  </div>
+
+  {# --- Payment note --- #}
+  <p class="autopay-note">
+    <span class="autopay-icon">!</span>
+    <strong>Thanks for paying by Automatic Payment.</strong>
+    Your automatic payment on {{ stmt.meta.dueDate | longdate }}, will include your
+    amount due, plus or minus any payment related activities or adjustments,
+    and less any credits issued before your bill due date.
+  </p>
+
+  <p class="help-line"><span class="help-link">Need help?</span>
+    Visit <span class="link">brightwave.com/customersupport</span> or call 1-800-BRIGHTWAVE for other ways to contact us.</p>
+
+  {# --- Remit stub --- #}
+  <div class="cut-line">
+    <span class="cut-left">Detach the bottom portion of this bill and enclose with your payment</span>
+    <span class="cut-right">Please write your account number on your check or money order</span>
+  </div>
+  <div class="cut-sub">Do not include correspondence with payment</div>
+
+  <div class="remit">
+    <div class="remit-left">
+      <img src="{{ logo_url }}" alt="BrightWave Cable" class="remit-logo">
+      <div class="remit-svc">
+        <div>{{ stmt.customer.serviceAddress.line1 }}</div>
+        {% if stmt.customer.serviceAddress.line2 %}<div>{{ stmt.customer.serviceAddress.line2 }}</div>{% endif %}
+        <div>
+          {{ stmt.customer.serviceAddress.city }},
+          {{ stmt.customer.serviceAddress.state }}
+          {{ stmt.customer.serviceAddress.zip }}
+        </div>
+      </div>
+      <div class="remit-mail">
+        <div>{{ stmt.customer.name }}</div>
+        <div>{{ stmt.customer.mailingAddress.line1 }}</div>
+        {% if stmt.customer.mailingAddress.line2 %}<div>{{ stmt.customer.mailingAddress.line2 }}</div>{% endif %}
+        <div>
+          {{ stmt.customer.mailingAddress.city }},
+          {{ stmt.customer.mailingAddress.state }}
+          {{ stmt.customer.mailingAddress.zip }}
+        </div>
+      </div>
+    </div>
+
+    <div class="remit-right">
+      <table class="remit-table">
+        <tr>
+          <td>Account number</td>
+          <td><strong>{{ stmt.meta.accountNumber }}</strong></td>
+        </tr>
+        <tr>
+          <td>Automatic payment</td>
+          <td><strong>{{ stmt.meta.dueDate | longdate }}</strong></td>
+        </tr>
+        <tr class="remit-please-pay">
+          <td>Please pay</td>
+          <td><strong>${{ stmt.glance.amountDue | money }}</strong></td>
+        </tr>
+      </table>
+      <div class="remit-applied">Electronic payment will be applied {{ stmt.meta.dueDate | longdate }}</div>
+
+      <div class="remit-to">
+        <div>{{ stmt.remitTo.name | upper }}</div>
+        <div>{{ stmt.remitTo.po_box }}</div>
+        <div>{{ stmt.remitTo.city | upper }}, {{ stmt.remitTo.state }} {{ stmt.remitTo.zip }}</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-footer-num">{{ stmt.meta.accountNumber }}</div>
+
+</section>
+
+
+{# ============================================================
+   PAGE 2 — Charge detail & taxes
+   ============================================================ #}
+<section class="page page-detail">
+
+  <header class="page-header">
+    <div class="brand"><img src="{{ logo_url }}" alt="BrightWave Cable"></div>
+    <div class="meta">
+      <div class="meta-cell">
+        <div class="meta-label">Account Number</div>
+        <div class="meta-value">{{ stmt.meta.accountNumber }}</div>
+      </div>
+      <div class="meta-cell">
+        <div class="meta-label">Billing Date</div>
+        <div class="meta-value">{{ stmt.meta.billDate | longdate }}</div>
+      </div>
+      <div class="meta-cell">
+        <div class="meta-label">Services From</div>
+        <div class="meta-value">
+          {{ stmt.meta.servicePeriodStart | shortdate }}
+          to {{ stmt.meta.servicePeriodEnd | shortdate }}
+        </div>
+      </div>
+      <div class="meta-cell">
+        <div class="meta-label">Page</div>
+        <div class="meta-value">2 of 2</div>
+      </div>
+    </div>
+  </header>
+
+  <div class="two-col detail">
+
+    {# Left column: charges #}
+    <div class="detail-charges">
+      <div class="section-bar">
+        <h2>Regular monthly charges</h2>
+        <span class="section-bar-total">${{ stmt.charges.total | money }}</span>
+      </div>
+
+      {% for section in stmt.charges.sections %}
+        {% if section.services %}
+          {# Plan section with services #}
+          <div class="charge-block">
+            <div class="charge-block-title">
+              <span>{{ section.name }}</span>
+              <span>${{ section.total | money }}</span>
+            </div>
+
+            <div class="charge-sub-title">
+              <span>My BrightWave services</span>
+              <span>${{ section.servicesSubtotal | money }}</span>
+            </div>
+
+            {% for svc in section.services %}
+              <div class="svc-row">
+                <span class="svc-name"><strong>{{ svc.name }}:</strong> {{ svc.tier }}</span>
+                <span class="svc-amount">${{ svc.price | money }}</span>
+              </div>
+
+              {% if svc.discounts %}
+                {% for d in svc.discounts %}
+                  <div class="svc-note green">
+                    Includes a {{ d.label }}{% if d.endDate %} that will end on {{ d.endDate | longdate }}{% endif %}
+                  </div>
+                {% endfor %}
+              {% endif %}
+
+              {% for inc in svc.included %}
+                <div class="svc-included">
+                  <span>{{ inc }}</span>
+                  <span>Included</span>
+                </div>
+              {% endfor %}
+
+              {% if svc.description %}
+                <div class="svc-desc">{{ svc.description }}</div>
+              {% endif %}
+
+              {% for li in svc.lineItems %}
+                <div class="svc-line">
+                  <span>{{ li.name }}</span>
+                  <span>${{ li.amount | money }}</span>
+                </div>
+              {% endfor %}
+            {% endfor %}
+
+            {% if section.discount and section.discount != 0 %}
+              <div class="svc-row discount-row">
+                <span><strong>Discounts Total</strong></span>
+                <span class="green">-${{ (-section.discount) | money }}</span>
+              </div>
+              <div class="svc-row">
+                <span class="green">{{ section.discountLabel }}</span>
+                <span class="green">-${{ (-section.discount) | money }}</span>
+              </div>
+            {% elif section.discountLabel and 'EXPIRED' in section.discountLabel %}
+              <div class="svc-row discount-row">
+                <span class="red"><strong>{{ section.discountLabel }}</strong></span>
+                <span class="red">$0.00</span>
+              </div>
+            {% endif %}
+          </div>
+
+        {% else %}
+          {# Simple section with line items #}
+          <div class="charge-block">
+            <div class="charge-block-title">
+              <span>{{ section.name }}</span>
+              <span>${{ section.total | money }}</span>
+            </div>
+            {% for li in section.lineItems %}
+              <div class="svc-line">
+                <span>{{ li.name }}</span>
+                <span>${{ li.amount | money }}</span>
+              </div>
+              {% if li.note %}
+                <div class="svc-line-note">{{ li.note }}</div>
+              {% endif %}
+            {% endfor %}
+          </div>
+        {% endif %}
+      {% endfor %}
+
+      <div class="section-bar">
+        <h2>Taxes, fees and other charges</h2>
+        <span class="section-bar-total">${{ stmt.taxes.total | money }}</span>
+      </div>
+
+      {% for cat in stmt.taxes.categories %}
+        <div class="charge-block">
+          <div class="charge-block-title">
+            <span>{{ cat.name }}</span>
+            <span>${{ cat.total | money }}</span>
+          </div>
+          {% for li in cat.lines %}
+            <div class="svc-line">
+              <span>{{ li.name }}</span>
+              <span>${{ li.amount | money }}</span>
+            </div>
+          {% endfor %}
+        </div>
+      {% endfor %}
+    </div>
+
+    {# Right column: What's included #}
+    <div class="detail-sidebar">
+      <div class="sidebar-box">
+        <h3>What's included?</h3>
+        <div class="incl-line">
+          <span class="incl-icon">📺</span>
+          <div><strong>TV:</strong> 185+ Channels</div>
+        </div>
+        <div class="incl-line">
+          <span class="incl-icon">📶</span>
+          <div><strong>Internet:</strong> 1 Gig</div>
+        </div>
+        <div class="incl-line">
+          <span class="incl-icon">📞</span>
+          <div>
+            <strong>Voice:</strong> US &amp; Int'l Calling<br>
+            For: {{ stmt.customer.voiceNumber }}
+          </div>
+        </div>
+        <div class="incl-foot">
+          Visit <span class="link">brightwave.com/myaccount</span> for more details.
+        </div>
+        <div class="incl-note">
+          You receive a monthly discount on your bill for subscribing to multiple BrightWave services.
+        </div>
+      </div>
+
+      {% if stmt.meta.promoExpirations %}
+      <div class="sidebar-box callout-box red">
+        <h3>What changed this month?</h3>
+        <p>Two promotional discounts ended this billing period, increasing your bill:</p>
+        <ul>
+          {% for exp in stmt.meta.promoExpirations %}
+            <li>{{ exp }}</li>
+          {% endfor %}
+        </ul>
+        <p class="callout-foot">Questions? Chat with BrightWave Help in the customer portal or call 1-800-BRIGHTWAVE.</p>
+      </div>
+      {% endif %}
+
+      <div class="sidebar-box subtle">
+        <p>If you are a Hulu or ESPN+ customer and then added the Disney Bundle, you will continue to be billed separately for Hulu or ESPN+, but your monthly Disney Bundle charge will be adjusted to reflect the Hulu and/or ESPN+ monthly charge.</p>
+      </div>
+    </div>
+  </div>
+
+</section>
+
+</body>
+</html>

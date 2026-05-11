@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 88" role="img" aria-label="BrightWave Cable">
+  <!-- Brand mark: rounded teal-blue square with a stylized wave + spark -->
+  <rect x="0" y="0" width="88" height="88" rx="18" ry="18" fill="#0B4F8C"/>
+  <!-- two flowing waves -->
+  <path d="M14 56 Q26 38 38 56 T62 56 T86 56" fill="none" stroke="#FFFFFF" stroke-width="6" stroke-linecap="round"/>
+  <path d="M14 70 Q26 52 38 70 T62 70 T86 70" fill="none" stroke="#2C8FBF" stroke-width="6" stroke-linecap="round"/>
+  <!-- spark -->
+  <circle cx="68" cy="22" r="7" fill="#F4B43E"/>
+  <circle cx="68" cy="22" r="3" fill="#FFFFFF" opacity="0.85"/>
+
+  <!-- Wordmark -->
+  <text x="104" y="56" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="36" font-weight="700" fill="#0B4F8C" letter-spacing="-1">Bright<tspan fill="#2C8FBF">Wave</tspan></text>
+  <text x="106" y="76" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="11" font-weight="500" fill="#5a6772" letter-spacing="3">CABLE  ·  INTERNET  ·  VOICE</text>
+</svg>

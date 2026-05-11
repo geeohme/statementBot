@@ -1,0 +1,10 @@
+.git
+.gitignore
+.env
+.env.*
+sample_pdfs/
+reference_images/
+README.md
+node_modules/
+__pycache__/
+*.pyc

@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BrightWave StatementBot</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="https://cdn.jsdelivr.net/npm/marked@13.0.3/marked.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/dompurify@3.1.6/dist/purify.min.js"></script>
+</head>
+<body>
+
+<div class="app">
+
+  <!-- ============ LEFT: chat ============ -->
+  <section class="chat-pane">
+    <header class="chat-header">
+      <div class="brand">
+        <div class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 88 88" xmlns="http://www.w3.org/2000/svg">
+            <rect x="0" y="0" width="88" height="88" rx="18" ry="18" fill="#0B4F8C"/>
+            <path d="M14 56 Q26 38 38 56 T62 56 T86 56" fill="none" stroke="#FFFFFF" stroke-width="6" stroke-linecap="round"/>
+            <path d="M14 70 Q26 52 38 70 T62 70 T86 70" fill="none" stroke="#2C8FBF" stroke-width="6" stroke-linecap="round"/>
+            <circle cx="68" cy="22" r="7" fill="#F4B43E"/>
+            <circle cx="68" cy="22" r="3" fill="#FFFFFF" opacity="0.85"/>
+          </svg>
+        </div>
+        <div class="brand-text">
+          <div class="brand-name">BrightWave <span>StatementBot</span></div>
+          <div class="brand-sub">Billing assistant</div>
+        </div>
+      </div>
+      <div class="status" id="health-status" style="visibility: hidden;"><span class="dot"></span> connecting…</div>
+    </header>
+
+    <div class="messages" id="messages" aria-live="polite"></div>
+
+    <div class="suggestions" id="suggestions">
+      <div class="suggestions-label">Try asking</div>
+      <div class="suggestions-row">
+        <button class="chip" data-prompt="Why did my bill go up this month?">Why did my bill go up?</button>
+        <button class="chip" data-prompt="Show me all my statements.">Show all my statements</button>
+        <button class="chip" data-prompt="Explain the Taxes">Explain the Taxes</button>
+        <button class="chip" data-prompt="Compare my April bill to my May bill.">Compare April vs May</button>
+        <button class="chip" data-prompt="Explain the Streamstore charges on my latest bill.">Explain Streamstore</button>
+        <button class="chip" data-prompt="When does my Guarantee Discount end?">When does my Guarantee end?</button>
+        <button class="chip" data-prompt="What's the 3 Product Discount?">What's the 3 Product Discount?</button>
+      </div>
+    </div>
+
+    <form class="composer" id="composer">
+      <textarea
+        id="composer-input"
+        placeholder="Ask about a charge, a change, or a specific bill…"
+        rows="1"
+        autocomplete="off"
+        autofocus></textarea>
+      <button type="submit" id="send-btn" class="send-btn" aria-label="Send">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="22" y1="2" x2="11" y2="13"></line>
+          <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+        </svg>
+      </button>
+    </form>
+  </section>
+
+  <!-- ============ RIGHT: PDF viewer ============ -->
+  <aside class="pdf-pane">
+    <header class="pdf-header">
+      <label for="statement-picker" class="picker-label">Statement</label>
+      <select id="statement-picker" class="picker"></select>
+      <div class="pdf-actions">
+        <a id="pdf-open" class="pdf-action" href="#" target="_blank" rel="noopener">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+            <polyline points="15 3 21 3 21 9"></polyline>
+            <line x1="10" y1="14" x2="21" y2="3"></line>
+          </svg>
+          Open
+        </a>
+        <a id="pdf-download" class="pdf-action" href="#" download>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+            <polyline points="7 10 12 15 17 10"></polyline>
+            <line x1="12" y1="15" x2="12" y2="3"></line>
+          </svg>
+          Download
+        </a>
+      </div>
+    </header>
+    <div class="pdf-frame-wrap">
+      <iframe id="pdf-frame" title="Statement preview" src="about:blank"></iframe>
+    </div>
+  </aside>
+
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>
