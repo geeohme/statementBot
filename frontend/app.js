@@ -11,9 +11,11 @@ const els = {
   sendBtn: $("#send-btn"),
 /*  status: $("#health-status"), */
   picker: $("#statement-picker"),
+  pdfPane: $("#pdf-pane"),
   pdfFrame: $("#pdf-frame"),
   pdfOpen: $("#pdf-open"),
   pdfDownload: $("#pdf-download"),
+  pdfToggle: $("#pdf-toggle"),
   suggestions: $("#suggestions"),
 };
 
@@ -193,6 +195,25 @@ async function loadStatements() {
 
 els.picker.addEventListener("change", () => {
   selectStatement(parseInt(els.picker.value, 10));
+});
+
+// ---------- Mobile PDF toggle ----------
+
+function setPdfExpanded(expanded) {
+  els.pdfPane.classList.toggle("expanded", expanded);
+  els.pdfToggle.setAttribute("aria-expanded", expanded ? "true" : "false");
+  document.body.style.overflow = expanded ? "hidden" : "";
+}
+
+els.pdfToggle.addEventListener("click", () => {
+  setPdfExpanded(!els.pdfPane.classList.contains("expanded"));
+});
+
+// Collapse the overlay if the viewport grows back to desktop width.
+window.addEventListener("resize", () => {
+  if (window.innerWidth > 900 && els.pdfPane.classList.contains("expanded")) {
+    setPdfExpanded(false);
+  }
 });
 
 // ---------- Health ----------

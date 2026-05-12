@@ -382,6 +382,30 @@ body::before {
 }
 .picker:focus { outline: none; border-color: var(--spark); }
 .pdf-actions { display: flex; gap: 6px; margin-left: auto; }
+
+/* Mobile PDF toggle button — hidden on desktop */
+.pdf-toggle {
+  display: none;
+  align-items: center;
+  gap: 5px;
+  background: var(--bg-card);
+  color: var(--text-soft);
+  border: 1px solid var(--border);
+  padding: 6px 11px;
+  border-radius: var(--r-sm);
+  font-family: var(--font);
+  font-size: 12.5px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+.pdf-toggle:hover { border-color: var(--spark); color: var(--spark-hi); }
+.pdf-toggle .pdf-toggle-collapse,
+.pdf-toggle .pdf-toggle-label-close { display: none; }
+.pdf-pane.expanded .pdf-toggle .pdf-toggle-expand,
+.pdf-pane.expanded .pdf-toggle .pdf-toggle-label-open { display: none; }
+.pdf-pane.expanded .pdf-toggle .pdf-toggle-collapse,
+.pdf-pane.expanded .pdf-toggle .pdf-toggle-label-close { display: inline; }
+.pdf-pane.expanded .pdf-toggle .pdf-toggle-collapse { display: inline-block; }
 .pdf-action {
   display: inline-flex; align-items: center; gap: 5px;
   background: var(--bg-card);
@@ -416,7 +440,47 @@ body::before {
 @media (max-width: 900px) {
   .app {
     grid-template-columns: 1fr;
-    grid-template-rows: 1fr 40vh;
+    grid-template-rows: 1fr auto;
   }
   .chat-pane { border-right: none; border-bottom: 1px solid var(--border); }
+
+  /* Collapse the PDF pane to just its header strip. The iframe is hidden
+     until the user taps "View" to expand it full-screen. */
+  .pdf-pane {
+    height: auto;
+  }
+  .pdf-header {
+    padding: 10px 14px;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .picker { flex: 1 1 140px; max-width: none; }
+  .pdf-toggle { display: inline-flex; }
+  .pdf-frame-wrap { display: none; }
+
+  /* Expanded state: PDF takes the full viewport as an overlay panel. */
+  .pdf-pane.expanded {
+    position: fixed;
+    inset: 0;
+    z-index: 50;
+    height: 100dvh;
+    border: none;
+  }
+  .pdf-pane.expanded .pdf-frame-wrap {
+    display: block;
+    flex: 1 1 0;
+    min-height: 0;
+  }
+
+  /* Suggestions: show at most two rows; scroll for the rest. */
+  .suggestions-row {
+    max-height: 78px;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
+    padding-right: 4px;
+  }
+  .suggestions-row::-webkit-scrollbar { width: 6px; }
+  .suggestions-row::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+  .suggestions-row::-webkit-scrollbar-track { background: transparent; }
 }
